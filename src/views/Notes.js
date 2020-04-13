@@ -13,19 +13,18 @@ export const Wrapper = styled.div`
 `;
 
 class Notes extends Component {
+  addItem = (e) => {
+    e.preventDefault();
+    const description = e.target[0].value;
+    this.props.addNote(description);
+    e.target.reset();
+    console.log(this.props.notes);
+  };
   render() {
     const notes = this.props.notes;
-
-    const addItem = (e) => {
-      e.preventDefault();
-      const description = e.target[0].value;
-      addNote(description);
-      e.target.reset();
-      console.log(this.props.notes);
-    };
     return (
       <Wrapper>
-        <AddNoteForm onSubmit={addItem}>
+        <AddNoteForm onSubmit={this.addItem}>
           <Input placeholder="Enter notes description" />
           <Button type="submit" value="Add">
             Add
