@@ -4,7 +4,7 @@ import Button from "components/Button";
 import AddNoteForm from "components/Form";
 import Input from "components/Input";
 import styled from "styled-components";
-import { addNote } from "actions";
+import { addNote as addNoteAction } from "actions";
 
 export const Wrapper = styled.div`
   padding: 30px;
@@ -12,21 +12,34 @@ export const Wrapper = styled.div`
   width: 500px;
 `;
 
-const Notes = ({ notes }) => (
-  <Wrapper>
-    <AddNoteForm>
-      <Input placeholder="Enter notes description" />
-      <Button type="submit" value="Add">
-        Add
-      </Button>
-    </AddNoteForm>
-    <div>
-      {notes.map((note) => (
-        <div>{note.description}</div>
-      ))}
-    </div>
-  </Wrapper>
-);
+class Notes extends Component {
+  render() {
+    const notes = this.props.notes;
+
+    const addItem = (e) => {
+      e.preventDefault();
+      const description = e.target[0].value;
+      addNote(description);
+      e.target.reset();
+      console.log(this.props.notes);
+    };
+    return (
+      <Wrapper>
+        <AddNoteForm onSubmit={() => addItem}>
+          <Input placeholder="Enter notes description" />
+          <Button type="submit" value="Add">
+            Add
+          </Button>
+        </AddNoteForm>
+        <div>
+          {notes.map((note) => (
+            <div key={note.id}>{note.description}</div>
+          ))}
+        </div>
+      </Wrapper>
+    );
+  }
+}
 
 const mapStateToProps = (state) => {
   const { notes } = state;
@@ -34,7 +47,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addNote: (description) => dispatch(addNote(description)),
+  addNote: (description) => dispatch(addNoteAction(description)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notes);
