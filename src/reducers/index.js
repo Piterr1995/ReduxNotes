@@ -17,10 +17,13 @@ const MyReducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_NOTE":
       return {
-        notes: notes.concat({
-          id: notes.length + 1,
-          description: action.description,
-        }),
+        notes: [
+          ...state.notes,
+          {
+            id: notes.length + 1,
+            description: action.description,
+          },
+        ],
       };
     case "ADD_ARTICLE":
       return {
