@@ -4,7 +4,7 @@ import Button from "components/Button";
 import AddNoteForm from "components/Form";
 import Input from "components/Input";
 import styled from "styled-components";
-import { addNote } from "actions";
+import { addNote, removeNote } from "actions";
 
 export const Wrapper = styled.div`
   padding: 30px;
@@ -20,6 +20,13 @@ class Notes extends Component {
     e.target.reset();
     console.log(this.props.notes);
   };
+
+  removeItem = (e) => {
+    console.log(e.target.getAttribute("id"));
+    const itemId = e.target.getAttribute("id");
+    e.preventDefault();
+    this.props.removeNote(itemId);
+  };
   render() {
     const notes = this.props.notes;
     return (
@@ -31,8 +38,10 @@ class Notes extends Component {
           </Button>
         </AddNoteForm>
         <div>
-          {notes.map((note) => (
-            <div key={note.id}>{note.description}</div>
+          {notes.map(({ id, description }) => (
+            <div id={id} onClick={this.removeItem} key={id}>
+              {description}
+            </div>
           ))}
         </div>
       </Wrapper>
@@ -47,6 +56,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   addNote: (description) => dispatch(addNote(description)),
+  removeNote: (id) => dispatch(removeNote(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notes);

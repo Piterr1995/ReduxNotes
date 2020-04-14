@@ -15,20 +15,25 @@ const MyReducer = (state = initialState, action) => {
   const articles = state.articles;
   const notes = state.notes;
   switch (action.type) {
+    case "REMOVE_NOTE":
+      return {
+        ...state,
+        notes: [...state.notes.filter((item) => item.id !== action.payload.id)],
+      };
     case "ADD_NOTE":
       return {
         notes: [
           ...state.notes,
           {
             id: notes.length + 1,
-            description: action.description,
+            description: action.payload.description,
           },
         ],
       };
     case "ADD_ARTICLE":
       return {
         articles: articles.concat({
-          id: articles.length + 1,
+          pk: articles.length + 1,
           description: action.description,
         }),
       };
